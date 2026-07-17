@@ -1,0 +1,71 @@
+INFORME DE INTEGRACIÓN: ASISTENTE VIRTUAL CON IA (GEMINI)
+Proyecto: Real Madrid Business Intelligence
+========================================================================
+
+1. OBJETIVO DEL PROYECTO
+------------------------------------------------------------------------
+El objetivo principal fue integrar un Asistente Virtual basado en Inteligencia Artificial dentro del dashboard de Business Intelligence del Real Madrid. Este asistente fue diseñado para explicar las funcionalidades del sistema (simulador de partidos, predicciones de asistencia, modelos econométricos y KPIs financieros) de forma interactiva y restringir sus respuestas exclusivamente a la temática del club y del proyecto.
+
+
+2. PASO 1: CONFIGURACIÓN DEL ENTORNO Y LIBRERÍAS
+------------------------------------------------------------------------
+- Se activó el entorno virtual local de Python.
+- Se instalaron las librerías necesarias para la comunicación con la IA:
+  * `google-generativeai`: SDK oficial de Google para interactuar con Gemini.
+  * `python-dotenv`: Librería para el manejo seguro de variables de entorno.
+- Se actualizaron las dependencias en el archivo `requirements.txt` para asegurar la reproducibilidad del entorno y evitar problemas de codificación.
+
+
+3. PASO 2: SEGURIDAD Y GESTIÓN DE CREDENCIALES
+------------------------------------------------------------------------
+Para evitar exponer la API Key de Google de forma pública en el código fuente:
+- Se creó un archivo oculto llamado `.env` en el directorio raíz del proyecto.
+- Se configuró la variable `GEMINI_API_KEY` dentro de este archivo.
+- En el código fuente (`app.py`), se implementó la lógica para leer esta clave de manera cifrada utilizando la función `os.getenv()`.
+
+
+4. PASO 3: SELECCIÓN Y CONFIGURACIÓN DEL MODELO DE IA
+------------------------------------------------------------------------
+- Se detectó que la versión antigua del modelo (`gemini-1.5-flash`) había sido descontinuada por las políticas de actualización de APIs de Google, lo que generaba un error 404 al inicio de las pruebas.
+- Se actualizó el código de inmediato para utilizar el modelo más reciente y estable: `gemini-2.5-flash`, el cual ofrece tiempos de respuesta más rápidos y mayor precisión de razonamiento.
+- Se implementó un "System Prompt" (Instrucción de Sistema) estricto para darle personalidad al bot. Se le ordenó ser un experto analista del Real Madrid y rechazar preguntas fuera de este contexto.
+
+
+5. PASO 4: MEJORA MULTIMODAL (ANÁLISIS DE IMÁGENES Y MÉTRICAS)
+------------------------------------------------------------------------
+Se potenció la Inteligencia Artificial dotándola de "visión":
+- Se integró un componente `st.file_uploader` que permite al usuario cargar capturas de pantalla de los gráficos, métricas y series de tiempo del propio sistema.
+- El código ahora procesa estas imágenes utilizando la librería `PIL` (Pillow) y las envía a Gemini en conjunto con la pregunta del usuario.
+- Con esto, el asistente es capaz de interpretar picos, caídas y tendencias visuales en las gráficas, traduciendo los datos a decisiones de negocio accionables y explicaciones legibles para cualquier directivo.
+
+
+6. PASO 5: INTEGRACIÓN EN LA INTERFAZ DE USUARIO (UX/UI)
+------------------------------------------------------------------------
+La integración visual en el sistema de Streamlit se realizó en dos frentes para maximizar la comodidad de uso:
+
+A. Pestaña Dedicada en el Menú:
+   - Se añadió "Asistente Virtual" al menú lateral principal, ofreciendo un espacio amplio a pantalla completa. Esto es ideal para analizar gráficos complejos y mantener conversaciones largas o leer respuestas detalladas.
+
+B. Botón Flotante Global (Pop-over Inteligente):
+   - Se reemplazó el antiguo botón decorativo de HTML (esquina inferior derecha) por un componente nativo interactivo de Streamlit (`st.popover`).
+   - A través de código CSS avanzado inyectado en Streamlit, el botón fue posicionado de manera absoluta en la esquina inferior derecha.
+   - Funcionalidad clave: Esto permite que el usuario pueda abrir un mini-chat de IA sobre CUALQUIER pestaña del sistema (como "Panel Directivo" o "Finanzas") sin perder de vista los datos que está analizando en ese momento.
+
+
+7. OPTIMIZACIÓN DEL CÓDIGO (ARQUITECTURA)
+------------------------------------------------------------------------
+Para evitar duplicar cientos de líneas de código entre la pestaña dedicada y el botón flotante:
+- Se encapsuló toda la lógica del chatbot de Gemini (carga del prompt, memoria del historial, botón de imágenes) dentro de una función de Python modular y reutilizable llamada `render_gemini_chat(key_prefix)`.
+- El parámetro `key_prefix` es crucial porque soluciona los conflictos internos de memoria de Streamlit, asignando IDs únicos. Esto permite que ambos chats (el del menú y el del popup) funcionen de forma simultánea en la misma página sin sobreescribir sus variables.
+
+
+8. ANTECEDENTES: PRUEBAS DE LLAMA 3 (PROCESAMIENTO LOCAL)
+------------------------------------------------------------------------
+Durante la fase de desarrollo, se implementó de forma experimental un diseño a doble columna que enfrentaba las respuestas de Gemini (Nube) contra Llama 3 (Procesamiento 100% Local mediante Ollama).
+- Motivo de cancelación: Debido a que ejecutar Llama 3 localmente demanda descargas de alto volumen (aprox. 4.7 GB para el modelo cuantizado) y uso intensivo de GPU/RAM, limitaba la usabilidad en computadoras de oficina.
+- Decisión técnica: Se limpió el código y se tomó la decisión definitiva de utilizar un enfoque 100% basado en la nube (Gemini AI), garantizando que el sistema sea extremadamente rápido, ligero y no consuma almacenamiento del equipo físico.
+
+
+========================================================================
+ESTADO FINAL:
+Implementación Exitosa. El Asistente Virtual está desplegado, es multimodal, está asegurado y se encuentra 100% funcional en la aplicación principal.

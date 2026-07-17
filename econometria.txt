@@ -1,0 +1,401 @@
+================================================================================
+      DOCUMENTACIÓN DEL MODELO ECONOMÉTRICO — REAL MADRID AI HUB
+      Análisis de Factores Determinantes de la Asistencia al Bernabéu
+================================================================================
+
+Autor          : Área de Business Intelligence — Real Madrid AI Hub
+Fecha          : Abril 2026
+Dataset        : historico_partidos_bernabeu.csv (81 observaciones, 2021–2024)
+Herramienta    : Python (statsmodels, pandas, plotly)
+Modelo         : Regresión Lineal Múltiple — Ordinary Least Squares (OLS)
+
+
+================================================================================
+ 1. PREGUNTA DE INVESTIGACIÓN
+================================================================================
+
+   ¿Qué factores económicos, deportivos y contextuales determinan la
+   asistencia de los aficionados al Estadio Santiago Bernabéu?
+
+   En otras palabras:
+   → ¿Por qué algunos partidos llenan el estadio al 100% y otros apenas
+     llegan al 55%?
+   → ¿Qué palancas puede activar la dirección del club para maximizar
+     la asistencia y, por tanto, los ingresos de matchday?
+
+
+================================================================================
+ 2. PROBLEMA QUE ESTAMOS SOLUCIONANDO
+================================================================================
+
+   El Real Madrid genera aproximadamente €45M por jornada en concepto de
+   taquilla, merchandising in-situ y food & beverage. Cada asiento vacío
+   representa una pérdida directa de ingresos.
+
+   Problema concreto:
+   ─────────────────
+   La dirección del club necesita entender CUANTITATIVAMENTE cuáles son
+   los factores que más influyen en la decisión de un aficionado de
+   comprar una entrada y asistir al partido. Esto permite:
+
+   a) Fijar precios dinámicos óptimos (revenue management)
+   b) Planificar promociones para partidos con baja demanda esperada
+   c) Ajustar los costos operativos del estadio según la asistencia prevista
+   d) Evaluar el impacto financiero de las lesiones de jugadores estrella
+   e) Tomar decisiones de comunicación y marketing basadas en datos
+
+   Sin un modelo econométrico, estas decisiones se toman por intuición.
+   Con él, cada decisión tiene respaldo estadístico cuantificable.
+
+
+================================================================================
+ 3. VARIABLE DEPENDIENTE (Y)
+================================================================================
+
+   ASISTENCIA (numérica continua)
+   ──────────────────────────────
+   • Definición  : Número real de personas que ingresaron al estadio
+   • Unidad      : Personas
+   • Rango       : 43,098 — 81,009
+   • Capacidad   : 81,044 (aforo oficial del Bernabéu renovado)
+   • Fuente      : Datos históricos del club (2021-2024)
+
+   Esta es la variable que el modelo busca EXPLICAR y PREDECIR.
+
+
+================================================================================
+ 4. VARIABLES INDEPENDIENTES (X) — DE QUÉ DEPENDE LA ASISTENCIA
+================================================================================
+
+   El modelo utiliza 9 variables independientes, agrupadas en 3 categorías:
+
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │  CATEGORÍA 1: VARIABLES ECONÓMICAS (Precio)                       │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │                                                                     │
+   │  4.1  precio_promedio (continua, €)                                │
+   │       Precio promedio de la entrada al partido.                    │
+   │       Rango: €30 — €163                                           │
+   │       Hipótesis: A mayor precio, menor asistencia (ley de demanda)│
+   │                                                                     │
+   │  4.2  precio_promedio_sq (continua, €²)                           │
+   │       Cuadrado del precio promedio (variable construida).          │
+   │       Propósito: Capturar el efecto NO LINEAL del precio.         │
+   │       Hipótesis: La relación precio-asistencia NO es una línea    │
+   │       recta, sino una parábola invertida. Precios muy bajos       │
+   │       señalan "partido sin importancia" y precios altos excluyen  │
+   │       fans por restricción presupuestaria.                        │
+   │                                                                     │
+   └─────────────────────────────────────────────────────────────────────┘
+
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │  CATEGORÍA 2: VARIABLES DEPORTIVAS                                 │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │                                                                     │
+   │  4.3  posicion_tabla (ordinal, 1-20)                               │
+   │       Posición del Real Madrid en la tabla al momento del partido. │
+   │       Hipótesis: Estar en la cima atrae más aficionados.          │
+   │                                                                     │
+   │  4.4  importancia (binaria, 0/1)                                   │
+   │       1 = Partido Top (Clásico, Champions, Derbi)                 │
+   │       0 = Partido regular de liga                                  │
+   │       Hipótesis: Los partidos "grandes" generan asistencia masiva.│
+   │                                                                     │
+   │  4.5  cracks_disponibles (binaria, 0/1)                            │
+   │       1 = Las estrellas titulares están sanas y disponibles        │
+   │       0 = Ausencia de jugadores clave por lesión o sanción        │
+   │       Hipótesis: Los fans pagan para ver a sus ídolos.            │
+   │                                                                     │
+   │  4.6  racha_equipo (continua, 0-15)                                │
+   │       Puntos obtenidos en los últimos 5 partidos.                 │
+   │       Rango: 5 — 15                                                │
+   │       Hipótesis: Un equipo ganando atrae más público (momentum).  │
+   │                                                                     │
+   │  4.7  distancia_rival_km (continua, km)                            │
+   │       Distancia geográfica del rival visitante a Madrid.           │
+   │       Rango: 6 km (Rayo Vallecano) — 1,750 km (Leipzig)          │
+   │       Hipótesis: Rivales cercanos traen más afición visitante,    │
+   │       rivales lejanos de Champions generan otra expectativa.      │
+   │                                                                     │
+   └─────────────────────────────────────────────────────────────────────┘
+
+   ┌─────────────────────────────────────────────────────────────────────┐
+   │  CATEGORÍA 3: VARIABLES CONTEXTUALES                               │
+   ├─────────────────────────────────────────────────────────────────────┤
+   │                                                                     │
+   │  4.8  Hora_Noche (binaria, 0/1)                                    │
+   │       Variable construida a partir del campo "hora".               │
+   │       1 = Partido en horario nocturno                              │
+   │       0 = Partido en horario de tarde                              │
+   │       Hipótesis: Los partidos nocturnos pueden tener más          │
+   │       asistencia por disponibilidad laboral de los fans.          │
+   │                                                                     │
+   │  4.9  temperatura (continua, °C)                                   │
+   │       Temperatura ambiente el día del partido.                    │
+   │       Rango: 0°C — 36°C                                           │
+   │       Hipótesis: Temperaturas extremas (frío o calor) reducen     │
+   │       la asistencia.                                              │
+   │                                                                     │
+   └─────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+ 5. RELACIONES ENTRE LAS VARIABLES
+================================================================================
+
+   5.1  ECUACIÓN DEL MODELO
+   ────────────────────────
+
+   Asistencia = β₀ + β₁·Precio + β₂·Precio² + β₃·Posición
+                + β₄·Importancia + β₅·Noche + β₆·Temperatura
+                + β₇·Cracks + β₈·Racha + β₉·Distancia + ε
+
+   Donde:
+   • β₀         = Intercepto (asistencia base cuando todo es cero)
+   • β₁ a β₉    = Coeficientes estimados por OLS
+   • ε           = Término de error (lo que el modelo no puede explicar)
+
+
+   5.2  NATURALEZA DE LAS RELACIONES
+   ──────────────────────────────────
+
+   RELACIÓN LINEAL POSITIVA (más X → más asistencia):
+   • importancia      (+)  Partidos Top llenan el estadio
+   • cracks_disponibles (+) Estrellas sanas atraen público
+   • racha_equipo      (+)  Ganar genera momentum
+
+   RELACIÓN LINEAL NEGATIVA (más X → menos asistencia):
+   • posicion_tabla    (-)  Bajar posiciones aleja fans
+
+   RELACIÓN NO LINEAL (CUADRÁTICA):
+   • precio_promedio   (∩)  Forma de parábola invertida
+     → Precios bajos: poca asistencia (señal de "partido menor")
+     → Precios medios: asistencia máxima (punto óptimo)
+     → Precios altos: caída de asistencia (barrera económica)
+
+   RELACIONES DÉBILES O AMBIGUAS:
+   • temperatura       (~)  Efecto moderado o no significativo
+   • Hora_Noche        (~)  Efecto contextual variable
+   • distancia_rival   (~)  Depende de si es Champions o liga
+
+
+================================================================================
+ 6. MODELO SELECCIONADO: OLS (Ordinary Least Squares)
+================================================================================
+
+   6.1  ¿POR QUÉ OLS?
+   ───────────────────
+
+   Se eligió Regresión Lineal Múltiple por Mínimos Cuadrados Ordinarios
+   (OLS) porque:
+
+   a) INTERPRETABILIDAD: Cada coeficiente βᵢ tiene una lectura directa:
+      "por cada unidad que sube la variable X, la asistencia cambia
+      en βᵢ personas, manteniendo todo lo demás constante (ceteris paribus)".
+
+   b) INFERENCIA ESTADÍSTICA: OLS provee p-values, intervalos de confianza
+      y tests de hipótesis que permiten validar SI una variable realmente
+      importa o si su efecto observado es solo ruido estadístico.
+
+   c) TRANSPARENCIA ANTE LA DIRECCIÓN: Los directivos del club necesitan
+      entender POR QUÉ el modelo dice lo que dice. Un modelo de caja negra
+      (como XGBoost) puede predecir mejor, pero no explica causalidad.
+
+   d) ELASTICIDAD PRECIO-DEMANDA: OLS permite calcular directamente la
+      elasticidad (¿cuánto % cambia la asistencia si el precio sube 1%?),
+      que es la métrica clave para el revenue management de taquilla.
+
+
+   6.2  ESPECIFICACIÓN TÉCNICA
+   ───────────────────────────
+
+   • Librería        : statsmodels (Python)
+   • Método          : sm.OLS(y, X).fit()
+   • Constante       : Incluida (sm.add_constant)
+   • Observaciones   : 81 partidos históricos (2021-2024)
+   • Variables       : 9 independientes + 1 dependiente
+   • Preprocesamiento:
+     - Variable "hora" convertida a dummy binaria (Hora_Noche)
+     - Variable "precio_promedio_sq" creada como precio²
+
+
+================================================================================
+ 7. HERRAMIENTAS DE VALIDACIÓN DE IMPORTANCIA DE VARIABLES
+================================================================================
+
+   Para determinar si cada variable REALMENTE importa o su efecto es solo
+   casualidad, se utilizan las siguientes herramientas estadísticas:
+
+
+   7.1  TEST t DE STUDENT (por variable individual)
+   ─────────────────────────────────────────────────
+
+   ¿Qué hace?
+   Evalúa si cada coeficiente βᵢ es SIGNIFICATIVAMENTE diferente de cero.
+
+   Hipótesis:
+   • H₀ (Nula)       : βᵢ = 0 → La variable NO tiene efecto real
+   • H₁ (Alternativa): βᵢ ≠ 0 → La variable SÍ afecta la asistencia
+
+   Métrica: p-value
+   • Si p < 0.05  → SIGNIFICATIVA (95% de confianza de que el efecto es real)
+   • Si p < 0.01  → MUY SIGNIFICATIVA (99% de confianza)
+   • Si p < 0.001 → ALTAMENTE SIGNIFICATIVA (99.9% de confianza)
+   • Si p > 0.05  → NO SIGNIFICATIVA (no hay evidencia suficiente)
+
+   Resultado: Cada variable del modelo tiene su propio p-value reportado
+   en la tabla de resultados OLS del módulo "🔬 Modelo".
+
+
+   7.2  TEST F GLOBAL (modelo completo)
+   ─────────────────────────────────────
+
+   ¿Qué hace?
+   Evalúa si el CONJUNTO de todas las variables tiene algún poder
+   explicativo, es decir, si el modelo como un todo es útil.
+
+   Hipótesis:
+   • H₀: β₁ = β₂ = ... = β₉ = 0 → Ninguna variable importa
+   • H₁: Al menos un βᵢ ≠ 0      → Al menos una variable importa
+
+   Resultado: Si p(F) < 0.05, el modelo en su conjunto es estadísticamente
+   significativo.
+
+
+   7.3  COEFICIENTE DE DETERMINACIÓN (R² y R² Ajustado)
+   ─────────────────────────────────────────────────────
+
+   ¿Qué hace?
+   Mide qué PORCENTAJE de la variabilidad en la asistencia es explicado
+   por las 9 variables del modelo.
+
+   Interpretación:
+   • R² = 0.75 → El modelo explica el 75% de las diferencias en asistencia
+   • R² Ajustado → Penaliza por añadir variables inútiles (evita overfitting)
+
+   ¿Por qué importa?
+   Si R² es bajo, significa que hay factores importantes que NO estamos
+   midiendo (por ejemplo, clima extremo, partidos televisados, etc.).
+
+
+   7.4  ANÁLISIS DE COEFICIENTES (Magnitud e Interpretación)
+   ─────────────────────────────────────────────────────────
+
+   ¿Qué hace?
+   Compara el TAMAÑO absoluto de cada coeficiente para identificar qué
+   variable tiene el mayor impacto práctico en la asistencia.
+
+   Ejemplo:
+   • Si β_importancia = +5,000 → Un partido Top atrae 5,000 fans extra
+   • Si β_temperatura  = +15   → Cada grado extra solo añade 15 fans
+
+   Claramente, la importancia del partido tiene un impacto 333 veces
+   mayor que la temperatura. Esta comparación se visualiza en el
+   Forest Plot del módulo "🔬 Modelo".
+
+
+   7.5  ELASTICIDAD PRECIO-DEMANDA
+   ───────────────────────────────
+
+   ¿Qué hace?
+   Calcula cuánto % CAMBIA la asistencia cuando el precio sube un 1%.
+
+   Fórmula (para modelo cuadrático):
+   Elasticidad = (β₁ + 2·β₂·P̄) × (P̄ / Ȳ)
+
+   Donde:
+   • P̄ = Precio promedio histórico
+   • Ȳ = Asistencia promedio histórica
+   • β₁ = Coeficiente lineal del precio
+   • β₂ = Coeficiente cuadrático del precio
+
+   Interpretación:
+   • |E| < 1 → Demanda INELÁSTICA: los fans son poco sensibles al precio.
+     Se puede subir precios sin perder mucha asistencia.
+   • |E| > 1 → Demanda ELÁSTICA: los fans son muy sensibles al precio.
+     Subir precios provocaría caída significativa de asistencia.
+
+
+   7.6  ANÁLISIS DE SENSIBILIDAD (Tornado Chart)
+   ──────────────────────────────────────────────
+
+   ¿Qué hace?
+   Simula variaciones PLAUSIBLES de cada variable y mide cuánto cambia
+   la asistencia predicha. Esto traduce los coeficientes estadísticos
+   a un lenguaje de negocio.
+
+   Escenarios simulados:
+   • Importancia: Partido Top vs Partido Regular
+   • Cracks: Estrellas disponibles vs Lesionadas
+   • Racha: Racha perfecta (+5 pts) vs Racha actual
+   • Precio: Variación de €10 sobre la media
+   • Distancia: Derbi local vs Rival internacional
+
+   Resultado: Un gráfico horizontal tipo "tornado" que muestra cuál
+   factor mueve más la aguja de asistencia.
+
+
+   7.7  GRÁFICOS BIVARIADOS (Validación Visual)
+   ─────────────────────────────────────────────
+
+   ¿Qué hacen?
+   Visualizan la relación DIRECTA entre cada variable independiente y la
+   asistencia, permitiendo confirmar visualmente lo que los números dicen.
+
+   Tipos de gráficos utilizados:
+   • Violin Plot      → Importancia del partido (distribución por grupo)
+   • Scatter + Curva  → Precio vs Asistencia (con parábola OLS superpuesta)
+   • Box Plot         → Cracks disponibles (comparación de medianas)
+   • Scatter + Trend  → Racha, Posición, Distancia (tendencia lineal)
+
+   Cada gráfico incluye un panel de interpretación con:
+   • Coeficiente OLS estimado
+   • p-value de significancia
+   • Insight ejecutivo para la dirección
+
+
+================================================================================
+ 8. STACK TECNOLÓGICO COMPLETO
+================================================================================
+
+   ┌──────────────────────┬────────────────────────────────────────────┐
+   │  Componente          │  Herramienta                              │
+   ├──────────────────────┼────────────────────────────────────────────┤
+   │  Lenguaje            │  Python 3.x                               │
+   │  Modelo econométrico │  statsmodels (sm.OLS)                     │
+   │  Manipulación datos  │  pandas                                   │
+   │  Cálculo numérico    │  numpy                                    │
+   │  Visualización       │  plotly (express + graph_objects)          │
+   │  Frontend / UI       │  Streamlit                                │
+   │  Datos fuente        │  historico_partidos_bernabeu.csv           │
+   │  Almacén Cloud       │  Snowflake (REALMADRID_DB)                │
+   │  Validación          │  p-values, R², F-test, elasticidad, etc.  │
+   └──────────────────────┴────────────────────────────────────────────┘
+
+
+================================================================================
+ 9. RESUMEN EJECUTIVO
+================================================================================
+
+   PREGUNTA  : ¿Qué factores determinan la asistencia al Bernabéu?
+
+   RESPUESTA : La asistencia depende principalmente de 3 factores:
+
+               1. IMPORTANCIA DEL PARTIDO (mayor impacto)
+                  → Un Clásico o Champions atrae miles de fans extra.
+
+               2. DISPONIBILIDAD DE ESTRELLAS
+                  → Las lesiones de titulares cuestan miles de asientos.
+
+               3. PRECIO DE ENTRADA (efecto cuadrático)
+                  → Existe un punto óptimo entre ingresos y aforo.
+
+   MODELO    : Regresión OLS con 9 variables (R² ≈ 0.75+)
+
+   VALOR     : Permite al club fijar precios dinámicos, planificar
+               promociones y cuantificar el impacto financiero de
+               cada decisión deportiva y comercial.
+
+================================================================================
+                          FIN DEL DOCUMENTO
+================================================================================

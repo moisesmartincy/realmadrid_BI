@@ -1,0 +1,14 @@
+[theme]
+# Tema Premium Real Madrid corporativo (Rediseñado Profundo)
+primaryColor = "#C7A06F" 
+backgroundColor = "#0A1422" 
+secondaryBackgroundColor = "#1C2B3F" 
+textColor = "#FFFFFF" 
+font = "sans serif"
+
+[server]
+port = 8501
+enableCORS = false
+
+[client]
+showErrorDetails = false

@@ -1,0 +1,81 @@
+fecha,rival,competicion,asistencia,precio_promedio,posicion_tabla,importancia,hora,temperatura,resultado,goles_favor,capacidad_utilizada,racha_equipo,cracks_disponibles,distancia_rival_km
+2021-10-10,Betis,Copa del Rey,45578,30,2,0,noche,16,victoria,4,56.2,15,1,390
+2021-10-15,Barcelona,Liga,63065,129,1,1,noche,17,victoria,4,77.8,7,0,505
+2021-10-21,Liverpool,Champions,73659,112,2,1,noche,19,victoria,2,90.9,7,1,1450
+2021-10-29,Leipzig,Liga,68646,63,2,0,noche,10,victoria,3,84.7,14,1,1750
+2021-11-12,Barcelona,Liga,56870,136,1,1,tarde,17,derrota,0,70.2,5,1,505
+2021-11-25,Liverpool,Liga,63961,128,2,1,tarde,14,empate,2,78.9,9,0,1450
+2021-12-08,Villarreal,Liga,68676,61,1,0,noche,12,victoria,4,84.7,15,1,310
+2021-12-16,Valencia,Champions,67745,90,1,0,noche,6,empate,1,83.6,11,0,300
+2021-12-30,Celta,Copa del Rey,51605,45,3,0,tarde,0,victoria,2,63.7,12,1,460
+2022-01-04,Rayo Vallecano,Copa del Rey,52745,44,1,0,tarde,9,victoria,2,65.1,10,1,6
+2022-01-15,Real Sociedad,Liga,70035,90,1,0,tarde,11,victoria,3,86.4,14,1,350
+2022-01-24,Man City,Liga,48559,158,2,1,tarde,4,empate,2,59.9,15,1,1450
+2022-02-01,Granada,Liga,66717,68,2,0,noche,6,victoria,2,82.3,12,1,360
+2022-02-11,Bayern,Champions,51393,153,2,1,noche,10,victoria,2,63.4,7,1,1480
+2022-02-17,Betis,Liga,57670,146,1,1,noche,11,victoria,2,71.2,13,1,390
+2022-02-23,Athletic,Champions,62256,137,2,1,noche,4,victoria,4,76.8,11,1,320
+2022-03-05,Cádiz,Liga,69385,65,1,0,tarde,14,victoria,5,85.6,14,1,490
+2022-03-14,Alavés,Copa del Rey,46375,43,3,0,noche,18,empate,1,57.2,15,0,280
+2022-03-26,Getafe,Liga,65478,65,3,0,noche,8,empate,2,80.8,13,1,14
+2022-04-01,Betis,Liga,68077,72,1,0,tarde,18,empate,1,84.0,15,0,390
+2022-04-07,Sevilla,Champions,66430,127,2,1,tarde,35,victoria,3,82.0,11,1,390
+2022-04-21,Athletic,Liga,66979,81,1,0,tarde,13,victoria,1,82.6,8,1,320
+2022-05-05,Liverpool,Liga,65830,135,1,1,noche,19,victoria,4,81.2,13,1,1450
+2022-05-11,Atlético,Liga,57602,147,1,1,tarde,18,victoria,3,71.1,12,1,8
+2022-05-19,Granada,Liga,61018,42,3,0,noche,12,victoria,4,75.3,13,1,360
+2022-05-28,Dortmund,Liga,43098,163,1,1,tarde,14,victoria,2,53.2,7,1,1430
+2022-06-05,Bayern,Liga,51831,152,2,1,tarde,27,victoria,2,64.0,11,1,1480
+2022-08-15,Milan,Liga,63017,136,2,1,tarde,30,victoria,5,77.8,13,1,1180
+2022-08-27,Mallorca,Liga,61491,57,3,0,tarde,36,victoria,4,75.9,7,1,550
+2022-09-06,PSG,Liga,68170,124,2,1,tarde,29,victoria,2,84.1,13,0,1050
+2022-09-16,Athletic,Champions,54949,143,3,1,noche,30,empate,1,67.8,11,1,320
+2022-09-24,Milan,Champions,56232,148,2,1,tarde,28,victoria,5,69.4,14,1,1180
+2022-09-30,Cádiz,Liga,59803,38,3,0,noche,31,victoria,3,73.8,13,1,490
+2022-10-07,Juventus,Champions,66648,121,2,1,noche,15,victoria,2,82.2,6,1,1060
+2022-10-14,Valencia,Liga,65820,57,2,0,tarde,15,victoria,6,81.2,7,1,300
+2022-10-25,Milan,Liga,48255,155,1,1,noche,12,empate,0,59.5,7,1,1180
+2022-11-07,Juventus,Liga,56575,139,1,1,noche,23,empate,1,69.8,6,1,1060
+2022-11-17,Alavés,Copa del Rey,55491,51,1,0,tarde,14,derrota,0,68.5,15,1,280
+2022-11-25,Espanyol,Liga,71891,83,1,0,noche,20,empate,0,88.7,13,1,500
+2022-11-30,Celta,Liga,67034,76,2,0,noche,8,victoria,6,82.7,9,1,460
+2022-12-10,Athletic,Copa del Rey,43878,31,2,0,noche,0,empate,2,54.1,11,1,320
+2022-12-19,Cádiz,Copa del Rey,52303,43,2,0,noche,10,empate,3,64.5,15,1,490
+2022-12-27,Alavés,Liga,55977,30,1,0,noche,6,victoria,1,69.1,14,1,280
+2023-01-06,Liverpool,Champions,61259,135,2,1,noche,8,victoria,2,75.6,14,0,1450
+2023-01-18,Athletic,Copa del Rey,48314,32,2,0,tarde,10,victoria,3,59.6,13,1,320
+2023-01-30,Man City,Champions,48992,161,1,1,noche,16,victoria,2,60.5,15,1,1450
+2023-02-08,Man City,Liga,57355,148,1,1,noche,13,victoria,3,70.8,13,1,1450
+2023-02-16,Milan,Champions,60854,134,1,1,noche,1,victoria,2,75.1,12,0,1180
+2023-03-02,Villarreal,Liga,66060,127,1,1,tarde,15,empate,1,81.5,8,1,310
+2023-03-16,Betis,Liga,65693,53,1,0,tarde,13,victoria,2,81.1,9,1,390
+2023-03-26,Juventus,Liga,56427,147,2,1,tarde,10,victoria,2,69.6,14,1,1060
+2023-04-02,Leipzig,Liga,61201,32,1,0,noche,12,empate,1,75.5,14,1,1750
+2023-04-14,Dortmund,Liga,69425,123,1,1,noche,11,victoria,2,85.7,12,1,1430
+2023-04-19,Bayern,Liga,56470,148,1,1,tarde,17,victoria,3,69.7,13,1,1480
+2023-04-26,PSG,Champions,57810,148,1,1,tarde,15,victoria,6,71.3,10,1,1050
+2023-05-07,Cádiz,Liga,66600,57,1,0,tarde,12,victoria,6,82.2,9,1,490
+2023-05-13,Betis,Liga,65286,72,3,0,noche,11,derrota,1,80.6,14,1,390
+2023-05-24,Cádiz,Liga,62813,37,2,0,tarde,12,victoria,3,77.5,12,1,490
+2023-06-05,Leipzig,Liga,65695,80,1,0,tarde,24,victoria,3,81.1,11,1,1750
+2023-08-13,Barcelona,Champions,72991,119,1,1,noche,20,victoria,1,90.1,15,1,505
+2023-08-19,Milan,Champions,66812,127,1,1,noche,28,victoria,4,82.4,8,1,1180
+2023-08-29,Bayern,Liga,56046,149,1,1,noche,26,victoria,3,69.2,14,1,1480
+2023-09-07,Villarreal,Liga,64252,51,2,0,noche,19,derrota,1,79.3,12,0,310
+2023-09-14,Valencia,Liga,62445,136,2,1,noche,31,victoria,1,77.1,14,1,300
+2023-09-19,Elche,Liga,68101,84,2,0,tarde,24,victoria,2,84.0,14,1,350
+2023-09-28,Leipzig,Champions,60272,139,2,1,noche,21,victoria,3,74.4,11,1,1750
+2023-10-05,Chelsea,Copa del Rey,53586,46,1,0,noche,20,victoria,5,66.1,12,1,1260
+2023-10-11,Sevilla,Champions,71664,87,1,0,noche,23,derrota,1,88.4,15,0,390
+2023-10-24,Cádiz,Liga,67727,62,2,0,noche,15,empate,0,83.6,13,1,490
+2023-11-01,Man City,Liga,56272,144,1,1,noche,14,victoria,2,69.4,11,1,1450
+2023-11-11,Granada,Liga,65578,49,1,0,noche,14,derrota,0,80.9,11,1,360
+2023-11-18,Getafe,Liga,60564,137,3,1,noche,12,victoria,1,74.7,14,1,14
+2023-12-01,Barcelona,Liga,81009,95,1,1,tarde,8,victoria,3,100.0,14,1,505
+2023-12-15,Real Sociedad,Liga,64944,53,2,0,noche,2,victoria,2,80.1,13,1,350
+2023-12-27,Barcelona,Liga,57035,142,2,1,tarde,13,victoria,1,70.4,8,1,505
+2024-09-15,Barcelona,Liga,79500,95,1,1,noche,22,victoria,3,98.1,15,1,505
+2024-09-22,Atlético,Liga,76200,85,1,1,tarde,25,empate,1,94.0,13,0,8
+2024-09-29,Getafe,Liga,64800,45,1,0,tarde,18,victoria,2,79.9,10,1,14
+2024-10-06,Villarreal,Liga,67300,55,2,0,noche,16,victoria,1,83.0,12,1,310
+2024-10-20,Dortmund,Champions,80100,120,2,1,noche,14,victoria,4,98.8,14,1,1430

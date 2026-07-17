@@ -1,0 +1,26 @@
+# Entornos virtuales
+env/
+venv/
+.venv/
+env.bak/
+venv.bak/
+
+# Variables de entorno y secretos
+.env
+.env.*
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Directorios de configuración de IDEs
+.vscode/
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos temporales o de SO
+.DS_Store
+Thumbs.db

@@ -1,0 +1,25 @@
+# UI & Visualization
+streamlit==1.56.0
+plotly==6.7.0
+Pillow==11.1.0
+pydeck==0.9.1
+
+# Data Manipulation
+pandas==2.2.3
+numpy==2.4.4
+
+# Machine Learning & AI
+statsmodels==0.14.6
+scikit-learn==1.6.1
+xgboost==3.0.2
+keras==3.14.0
+torch==2.6.0
+h5py==3.14.0
+joblib==1.4.2
+
+# Data Sources & APIs
+snowflake-connector-python==4.4.0
+requests==2.33.1
+python-dotenv==1.0.0
+google-generativeai
+ollama
